@@ -69,6 +69,17 @@ const posts = (await getCollection('blog')).sort(
 			ul a:hover img {
 				box-shadow: var(--box-shadow);
 			}
+			.empty-state {
+				text-align: center;
+				padding: 4rem 1rem;
+			}
+			.empty-state h1 {
+				margin-bottom: 1rem;
+			}
+			.empty-state p {
+				color: rgb(var(--gray));
+				font-size: 1.1rem;
+			}
 			@media (max-width: 720px) {
 				ul {
 					gap: 0.5em;
@@ -90,23 +101,33 @@ const posts = (await getCollection('blog')).sort(
 		<Header />
 		<main>
 			<section>
-				<ul>
-					{
-						posts.map((post) => (
-							<li>
-								<a href={`/blog/${post.id}/`}>
-									{post.data.heroImage && (
-										<Image width={720} height={360} src={post.data.heroImage} alt="" />
-									)}
-									<h4 class="title">{post.data.title}</h4>
-									<p class="date">
-										<FormattedDate date={post.data.pubDate} />
-									</p>
-								</a>
-							</li>
-						))
-					}
-				</ul>
+				{
+					posts.length === 0 ? (
+						<div class="empty-state">
+							<h1>First post coming soon.</h1>
+							<p>
+								In the meantime, learn more <a href="/about">about this site</a> or get in
+								touch: <a href="mailto:hello@agasthya.dev">hello@agasthya.dev</a>.
+							</p>
+						</div>
+					) : (
+						<ul>
+							{posts.map((post) => (
+								<li>
+									<a href={`/blog/${post.id}/`}>
+										{post.data.heroImage && (
+											<Image width={720} height={360} src={post.data.heroImage} alt="" />
+										)}
+										<h4 class="title">{post.data.title}</h4>
+										<p class="date">
+											<FormattedDate date={post.data.pubDate} />
+										</p>
+									</a>
+								</li>
+							))}
+						</ul>
+					)
+				}
 			</section>
 		</main>
 		<Footer />
